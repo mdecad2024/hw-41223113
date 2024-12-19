@@ -408,7 +408,100 @@ function openByGet(){
 openByGet();
 </script>
 <h3>w11_hw</h3>
-<p><a href="https://drive.google.com/drive/folders/12lcgSezfYdPvfyQKX8FzqNs1PQxxYyDB">41223113 pinball scene creation.slvs</a></p>
+<p>1.請各分組根據 <a href="https://mde.tw/cad2024/downloads/flipper_nx2312.7z">flipper_nx2312.7z</a><span> 中的零件尺寸, 分別採 Solvespace 與 NX2312 繪製以下零件:</span></p>
+<p>Plongeur Batteur_sldprt.prt</p>
+<p>Piece composite_sldprt.prt</p>
+<p>Piece métalique gauche_sldprt.prt</p>
+<p>Plastique Flipper_sldprt.prt</p>
+<p>Support Bobine_sldprt.prt</p>
+<p>Platine Batteur_sldprt.prt</p>
+<p>Flipper_sldprt.prt</p>
+<p><a href="https://mde.tw/cad2024/downloads/flipper_in_solvespace.7z">flipper_in_solvespace.7z</a></p>
+<p><span>2.利用 Solvespace 與 NX2312 完成上列零件的組立</span></p>
+<p><span>3.</span>請擇一將所完成的 Solvespace 或 NX2312 組立檔案轉入 CoppeliaSim, 並嘗試讓 <span>Flipper_sldprt.prt 以每秒     10 度的速度旋轉。</span></p>
+<p><span style="background-color: #00ffff;">組員為以下3位:</span></p>
+<p><a href="https://drive.google.com/drive/folders/12lcgSezfYdPvfyQKX8FzqNs1PQxxYyDB">41223113 pinball scene creation.slvs</a> 利用slovespace繪製以下5張stl和影片</p>
+<p>41223114</p>
+<p>41223116</p>
+<script src="/static/jsc3d.js" type="text/javascript"></script>
+<div id="models"><canvas height="300" id="cv1" style="border: 1px solid;" width="400"></canvas> <canvas height="300" id="cv2" style="border: 1px solid;" width="400"></canvas> <canvas height="300" id="cv3" style="border: 1px solid;" width="400"></canvas> <canvas height="300" id="cv4" style="border: 1px solid;" width="400"></canvas> <canvas height="300" id="cv5" style="border: 1px solid;" width="400"></canvas> <!-- 可以添加更多的 canvas --></div>
+<div style="width: 400px; height: 70px; border: 1px solid;">Model Color:<input id="mdlClr" onchange="changeOption('ModelColor',this.value)" style="margin-right: 50px;" type="color" value="#00ff40"/> Back Color1:<input id="bckClr1" onchange="changeOption('BackgroundColor1',this.value)" style="margin-right: 50px;" type="color"/> Back Color2:<input id="bckClr2" onchange="changeOption('BackgroundColor2',this.value)" type="color"/><br/> Render Mode:<select id="render" onchange="changeOption('RenderMode',this.value)">
+<option>Flat</option>
+<option>Point</option>
+<option>Wireframe</option>
+<option>Smooth</option>
+</select>Definition:<select id="defini" onchange="changeOption('Definition',this.value)">
+<option>Standard</option>
+<option>low</option>
+<option>high</option>
+</select></div>
+<script type="text/javascript">
+var viewers = [];
+
+function getOptions(){
+    var mc = document.getElementById("mdlClr").value;
+    var bc1 = document.getElementById("bckClr1").value;
+    var bc2 = document.getElementById("bckClr2").value;
+    var ren = document.getElementById("render").value;
+    var def = document.getElementById("defini").value;
+    return {ModelColor: mc, BackgroundColor1: bc1, BackgroundColor2: bc2, RenderMode: ren, Definition: def};
+}
+
+function readSTLfile(opt, canvasId){
+    var canvas = document.getElementById(canvasId);
+    var viewer = new JSC3D.Viewer(canvas);
+    viewer.setParameter('SceneUrl', opt.SceneUrl);
+    viewer.setParameter('InitRotationX', 0);
+    viewer.setParameter('InitRotationY', 0);
+    viewer.setParameter('InitRotationZ', 0);
+    viewer.setParameter('ModelColor', opt.ModelColor);
+    viewer.setParameter('BackgroundColor1', opt.BackgroundColor1);
+    viewer.setParameter('BackgroundColor2', opt.BackgroundColor2);
+    viewer.setParameter('RenderMode', opt.RenderMode);
+    viewer.setParameter('Definition', opt.Definition);
+    viewer.init();
+    viewer.update();
+    viewers.push(viewer); // 保存 viewer 實例
+}
+
+function changeOption(strOpt,strValue){
+    console.log("change " + strOpt + " to " + strValue);
+    viewers.forEach(viewer => {
+        viewer.setParameter(strOpt, strValue);
+        viewer.init();
+        viewer.update();
+    });
+}
+
+function openByUrl(){
+    var url = document.getElementById("url").value;
+    var opt = getOptions();
+    opt.SceneUrl = url;
+    // 可以添加更多的 STL URL
+    readSTLfile(opt, 'cv1'); // 為每個 canvas 調用
+    readSTLfile(opt, 'cv2'); // 第二個 canvas
+readSTLfile(opt, 'cv3');
+readSTLfile(opt, 'cv4');
+readSTLfile(opt, 'cv5');
+}
+
+function openByGet(){
+    var urls = [
+        "https://s104.cycu.org/~41223113/41223113_flipper.stl",
+        "https://s104.cycu.org/~41223113/41223113_piece_composite.stl",
+        "https://s104.cycu.org/~41223113/41223113_plastic_flipper.stl",
+        "https://s104.cycu.org/~41223113/41223113_shaft.stl",
+        "https://s104.cycu.org/~41223113/41223113_solenoid.stl",
+        ];
+    var opt = getOptions();
+    urls.forEach((url, index) => {
+        opt.SceneUrl = url;
+        readSTLfile(opt, 'cv' + (index + 1)); // 動態生成 canvas ID
+    });
+}
+
+openByGet();
+</script>
 <p><span>pinball scene creation, 利用 Solvespace 建立彈珠檯兩端的 Flipper</span></p>
 <p><span><iframe allowfullscreen="allowfullscreen" height="314" src="//www.youtube.com/embed/ozebgo-zTN8" width="560"></iframe></span></p>
 <p><span>pinball scene creation, 利用 Solvespace 建立piece composite</span></p>
